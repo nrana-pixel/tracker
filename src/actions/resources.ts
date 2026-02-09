@@ -17,15 +17,10 @@ const resourceSchema = z.object({
 });
 
 export async function getResources(topicId?: string) {
-  const session = await getServerSession(authOptions);
-  
-  const where: any = {
+  const where = {
     isPublic: true,
+    ...(topicId ? { topicId } : {}),
   };
-  
-  if (topicId) {
-    where.topicId = topicId;
-  }
 
   return prisma.resource.findMany({
     where,
