@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} bg-gray-950 text-white min-h-screen`}>
+      <body className={`${inter.className} bg-black text-white min-h-screen selection:bg-white/20`}>
         <Providers>
           <Navbar />
           <main className="pt-16 min-h-screen">

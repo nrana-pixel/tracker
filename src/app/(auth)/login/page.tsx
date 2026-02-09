@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Icons } from "@/components/ui/Icons";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 
 export default function LoginPage() {
@@ -13,6 +14,7 @@ export default function LoginPage() {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    // ... existing handleSubmit ...
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError("");
@@ -43,12 +45,16 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="min-h-screen flex items-center justify-center px-4 bg-black">
             <Card variant="glass" className="w-full max-w-md animate-fade-in">
                 <CardHeader className="text-center">
-                    <div className="text-5xl mb-4">🚀</div>
-                    <CardTitle className="text-2xl">Welcome Back</CardTitle>
-                    <p className="text-gray-400 mt-2">
+                    <div className="flex justify-center mb-6">
+                        <div className="p-4 rounded-full bg-zinc-900 border border-zinc-800">
+                            <Icons.User className="w-8 h-8 text-zinc-400" />
+                        </div>
+                    </div>
+                    <CardTitle className="text-2xl text-white">Welcome Back</CardTitle>
+                    <p className="text-zinc-400 mt-2">
                         Sign in to continue tracking your progress
                     </p>
                 </CardHeader>
@@ -80,11 +86,11 @@ export default function LoginPage() {
                         </Button>
                     </form>
 
-                    <p className="mt-6 text-center text-gray-400">
+                    <p className="mt-8 text-center text-sm text-zinc-500">
                         Don't have an account?{" "}
                         <Link
                             href="/register"
-                            className="text-indigo-400 hover:text-indigo-300 font-medium"
+                            className="text-white hover:underline underline-offset-4 decoration-zinc-700 transition-all font-medium"
                         >
                             Create one
                         </Link>
