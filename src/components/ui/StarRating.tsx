@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Icons } from "@/components/ui/Icons";
 
 interface StarRatingProps {
     value: number;
@@ -18,10 +19,10 @@ export function StarRating({
 }: StarRatingProps) {
     const [hovered, setHovered] = useState<number | null>(null);
 
-    const sizes = {
-        sm: "text-lg",
-        md: "text-2xl",
-        lg: "text-3xl",
+    const sizeClasses = {
+        sm: "w-4 h-4",
+        md: "w-6 h-6",
+        lg: "w-8 h-8",
     };
 
     const displayValue = hovered !== null ? hovered : value;
@@ -34,8 +35,7 @@ export function StarRating({
                     type="button"
                     disabled={readonly}
                     className={cn(
-                        sizes[size],
-                        "transition-all duration-150",
+                        "transition-all duration-150 rounded-sm focus:outline-none focus:ring-2 focus:ring-white/20",
                         !readonly && "cursor-pointer hover:scale-110",
                         readonly && "cursor-default"
                     )}
@@ -43,14 +43,15 @@ export function StarRating({
                     onMouseLeave={() => setHovered(null)}
                     onClick={() => onChange?.(star)}
                 >
-                    <span
+                    <Icons.Star
                         className={cn(
-                            "transition-all duration-150",
-                            star <= displayValue ? "opacity-100" : "opacity-30"
+                            sizeClasses[size],
+                            "transition-colors duration-150",
+                            star <= displayValue
+                                ? "fill-white text-white"
+                                : "text-zinc-700 fill-transparent"
                         )}
-                    >
-                        ⭐
-                    </span>
+                    />
                 </button>
             ))}
         </div>

@@ -1,5 +1,4 @@
-"use client";
-
+import Link from "next/link";
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -11,6 +10,7 @@ import { Toggle } from "@/components/ui/Toggle";
 import { createDailyLog, deleteDailyLog } from "@/actions/logs";
 import { Topic, DailyLog } from "@prisma/client";
 import { formatDate, getStarString } from "@/lib/utils";
+import { Icons } from "@/components/ui/Icons";
 
 interface LogsClientProps {
     topics: Topic[];
@@ -59,27 +59,48 @@ export function LogsClient({ topics, initialLogs }: LogsClientProps) {
     }
 
     return (
-        <div>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold gradient-text">Daily Logs</h1>
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Daily Logs</h1>
+                    <p className="text-zinc-400">Track your daily progress</p>
+                </div>
                 <Button onClick={() => setIsCreating(!isCreating)}>
-                    {isCreating ? "Cancel" : "+ New Log"}
+                    {isCreating ? (
+                        <>
+                            <Icons.Close className="w-4 h-4 mr-2" />
+                            Cancel
+                        </>
+                    ) : (
+                        <>
+                            <Icons.Add className="w-4 h-4 mr-2" />
+                            New Log
+                        </>
+                    )}
                 </Button>
             </div>
 
             {isCreating && (
-                <Card className="mb-6 animate-fade-in">
+                <Card className="animate-fade-in border-zinc-800 bg-zinc-900/50">
                     <CardHeader>
-                        <CardTitle>📝 Log Your Progress</CardTitle>
+                        <CardTitle className="flex items-center gap-2">
+                            <Icons.Logs className="w-5 h-5" />
+                            Log Progress
+                        </CardTitle>
                     </CardHeader>
                     <CardContent>
                         {topics.length === 0 ? (
-                            <p className="text-gray-400">
-                                Create a topic first before logging progress.
-                            </p>
+                            <div className="text-center py-6">
+                                <p className="text-zinc-400 mb-4">
+                                    Create a topic first before logging progress.
+                                </p>
+                                <Link href="/topics">
+                                    <Button variant="secondary">Go to Topics</Button>
+                                </Link>
+                            </div>
                         ) : (
-                            <form onSubmit={handleCreate} className="space-y-4">
-                                <div className="grid md:grid-cols-2 gap-4">
+                            <form onSubmit={handleCreate} className="space-y-6">
+                                <div className="grid md:grid-cols-2 gap-6">
                                     <Select
                                         name="topicId"
                                         label="Topic"
@@ -97,7 +118,7 @@ export function LogsClient({ topics, initialLogs }: LogsClientProps) {
                                     />
                                 </div>
 
-                                <div className="grid md:grid-cols-2 gap-4">
+                                <div className="grid md:grid-cols-2 gap-6">
                                     <Input
                                         name="problemsSolved"
                                         type="number"
@@ -114,7 +135,7 @@ export function LogsClient({ topics, initialLogs }: LogsClientProps) {
                                     />
                                 </div>
 
-                                <div className="grid md:grid-cols-2 gap-4">
+                                <div className="grid md:grid-cols-2 gap-6">
                                     <Input
                                         name="backendWork"
                                         label="Backend Work"
@@ -133,20 +154,20 @@ export function LogsClient({ topics, initialLogs }: LogsClientProps) {
                                     placeholder="Any additional notes..."
                                 />
 
-                                <div className="space-y-1">
-                                    <label className="text-sm font-medium text-gray-300">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-zinc-400">
                                         Problem URLs (one per line)
                                     </label>
                                     <textarea
                                         name="problemUrls"
-                                        className="w-full bg-black/20 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[80px]"
+                                        className="w-full bg-white/[0.03] border border-white/[0.08] rounded-lg p-3 text-white focus:outline-none focus:ring-1 focus:ring-white/20 min-h-[80px] placeholder:text-zinc-600"
                                         placeholder="https://leetcode.com/ problems/two-sum..."
                                     />
                                 </div>
 
-                                <div className="grid md:grid-cols-2 gap-6">
+                                <div className="grid md:grid-cols-2 gap-8 p-4 rounded-lg bg-white/[0.02] border border-white/[0.05]">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                                        <label className="block text-sm font-medium text-zinc-400 mb-4">
                                             Energy Level
                                         </label>
                                         <Slider
@@ -157,14 +178,14 @@ export function LogsClient({ topics, initialLogs }: LogsClientProps) {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                                        <label className="block text-sm font-medium text-zinc-400 mb-4">
                                             Day Rating
                                         </label>
                                         <StarRating value={stars} onChange={setStars} />
                                     </div>
                                 </div>
 
-                                <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                                <div className="flex justify-between items-center pt-4 border-t border-white/[0.08]">
                                     <Toggle
                                         checked={isPublic}
                                         onChange={setIsPublic}
@@ -183,64 +204,96 @@ export function LogsClient({ topics, initialLogs }: LogsClientProps) {
             )}
 
             {logs.length === 0 ? (
-                <Card className="text-center py-12">
-                    <div className="text-5xl mb-4">📝</div>
+                <Card className="text-center py-16 border-dashed border-zinc-800 bg-transparent">
+                    <div className="flex justify-center mb-4">
+                        <div className="p-4 rounded-full bg-zinc-900">
+                            <Icons.Logs className="w-8 h-8 text-zinc-500" />
+                        </div>
+                    </div>
                     <h3 className="text-xl font-medium text-white mb-2">No logs yet</h3>
-                    <p className="text-gray-400">
+                    <p className="text-zinc-500 max-w-sm mx-auto">
                         Start logging your daily progress to track growth
                     </p>
                 </Card>
             ) : (
                 <div className="space-y-4">
                     {logs.map((log) => (
-                        <Card key={log.id} className="group">
-                            <CardContent className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <span className="text-lg font-medium text-white">
+                        <Card key={log.id} variant="glass" className="group hover:border-zinc-700 transition-colors">
+                            <CardContent className="flex flex-col md:flex-row gap-6 p-6">
+                                <div className="flex-1 space-y-4">
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-sm font-medium bg-white/[0.08] text-white border border-white/[0.05]">
+                                            <Icons.Topics className="w-3.5 h-3.5 text-zinc-400" />
                                             {log.topic.name}
                                         </span>
-                                        <span className="text-sm text-gray-500">
+                                        <span className="flex items-center text-sm text-zinc-500">
+                                            <Icons.Calendar className="w-3.5 h-3.5 mr-1.5" />
                                             {formatDate(log.date)}
                                         </span>
                                         {!log.isPublic && (
-                                            <span className="text-xs bg-gray-500/20 text-gray-400 px-2 py-0.5 rounded">
+                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-zinc-800 text-zinc-400">
+                                                <Icons.Lock className="w-3 h-3" />
                                                 Private
                                             </span>
                                         )}
                                     </div>
-                                    <div className="flex flex-wrap gap-4 text-sm text-gray-400">
-                                        <span>💻 {log.problemsSolved} problems</span>
-                                        <span>📚 {log.revisionVolume} revisions</span>
-                                        <span>⚡ Energy: {log.energy}/5</span>
-                                        {log.techUsed && <span>🔧 {log.techUsed}</span>}
+
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div className="flex items-center text-sm text-zinc-400">
+                                            <Icons.Check className="w-4 h-4 mr-2 text-emerald-500/80" />
+                                            {log.problemsSolved} problems
+                                        </div>
+                                        <div className="flex items-center text-sm text-zinc-400">
+                                            <Icons.Topics className="w-4 h-4 mr-2 text-blue-500/80" />
+                                            {log.revisionVolume} revisions
+                                        </div>
+                                        <div className="flex items-center text-sm text-zinc-400">
+                                            <Icons.Energy className="w-4 h-4 mr-2 text-yellow-500/80" />
+                                            Energy: {log.energy}/5
+                                        </div>
+                                        {log.techUsed && (
+                                            <div className="flex items-center text-sm text-zinc-400">
+                                                <Icons.Cpu className="w-4 h-4 mr-2 text-purple-500/80" />
+                                                {log.techUsed}
+                                            </div>
+                                        )}
                                     </div>
+
                                     {log.problemUrls && log.problemUrls.length > 0 && (
-                                        <div className="mt-2 space-y-1">
+                                        <div className="space-y-1 bg-black/20 p-3 rounded-lg border border-white/[0.05]">
                                             {log.problemUrls.map((url: string, i: number) => (
                                                 <a
                                                     key={i}
                                                     href={url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="block text-xs text-indigo-400 hover:underline truncate"
+                                                    className="flex items-center text-xs text-zinc-400 hover:text-white transition-colors group/link truncate"
                                                 >
-                                                    🔗 {url}
+                                                    <Icons.Link className="w-3 h-3 mr-2 text-zinc-600 group-hover/link:text-zinc-300" />
+                                                    {url}
                                                 </a>
                                             ))}
                                         </div>
                                     )}
+
                                     {log.notes && (
-                                        <p className="mt-2 text-sm text-gray-500">{log.notes}</p>
+                                        <p className="text-sm text-zinc-400 italic border-l-2 border-zinc-800 pl-3">
+                                            {log.notes}
+                                        </p>
                                     )}
                                 </div>
-                                <div className="flex items-center gap-4">
-                                    <span className="text-lg">{getStarString(log.stars)}</span>
+
+                                <div className="flex flex-row md:flex-col items-center justify-between gap-4 border-t md:border-t-0 md:border-l border-white/[0.05] pt-4 md:pt-0 md:pl-6 pl-0">
+                                    <div className="flex items-center gap-1 text-yellow-500/80">
+                                        <Icons.Star className="w-5 h-5 fill-current" />
+                                        <span className="text-lg font-bold text-white">{log.stars}</span>
+                                    </div>
                                     <button
                                         onClick={() => handleDelete(log.id)}
-                                        className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-red-500"
+                                        className="opacity-0 group-hover:opacity-100 transition-all p-2 hover:bg-red-500/10 rounded-md text-zinc-500 hover:text-red-500"
+                                        title="Delete log"
                                     >
-                                        🗑️
+                                        <Icons.Delete className="w-4 h-4" />
                                     </button>
                                 </div>
                             </CardContent>

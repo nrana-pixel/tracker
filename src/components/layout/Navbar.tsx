@@ -4,15 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
+import { Icons } from "@/components/ui/Icons";
+import { Button } from "@/components/ui/Button";
 
 const navItems = [
-    { href: "/dashboard", label: "Dashboard", icon: "📊" },
-    { href: "/topics", label: "Topics", icon: "📚" },
-    { href: "/logs", label: "Daily Logs", icon: "📝" },
-    { href: "/skills", label: "Skills", icon: "💪" },
-    { href: "/resources", label: "Resources", icon: "📚" },
-    { href: "/analytics", label: "Analytics", icon: "📈" },
-    { href: "/feed", label: "Activity Feed", icon: "🌍" },
+    { href: "/dashboard", label: "Dashboard", Icon: Icons.Dashboard },
+    { href: "/topics", label: "Topics", Icon: Icons.Topics },
+    { href: "/logs", label: "Logs", Icon: Icons.Logs },
+    { href: "/skills", label: "Skills", Icon: Icons.Skills },
+    { href: "/resources", label: "Resources", Icon: Icons.Doc },
+    { href: "/analytics", label: "Analytics", Icon: Icons.Analytics },
+    { href: "/feed", label: "Feed", Icon: Icons.Feed },
 ];
 
 export function Navbar() {
@@ -20,15 +22,16 @@ export function Navbar() {
     const { data: session } = useSession();
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-xl border-b border-white/10">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/[0.08]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center gap-8">
                         <Link
                             href="/"
-                            className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent"
+                            className="text-lg font-semibold tracking-tight text-white flex items-center gap-2"
                         >
-                            🚀 DSA Tracker
+                            <Icons.Trending className="w-5 h-5" />
+                            <span>Tracker</span>
                         </Link>
 
                         {session && (
@@ -38,13 +41,13 @@ export function Navbar() {
                                         key={item.href}
                                         href={item.href}
                                         className={cn(
-                                            "px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                                            "px-3 py-2 rounded-md text-sm transition-all duration-200 flex items-center gap-2",
                                             pathname === item.href
-                                                ? "bg-white/10 text-white"
-                                                : "text-gray-400 hover:text-white hover:bg-white/5"
+                                                ? "bg-white text-black font-medium"
+                                                : "text-zinc-400 hover:text-white hover:bg-white/[0.05]"
                                         )}
                                     >
-                                        <span className="mr-1">{item.icon}</span>
+                                        <item.Icon className="w-4 h-4" />
                                         {item.label}
                                     </Link>
                                 ))}
@@ -57,30 +60,28 @@ export function Navbar() {
                             <>
                                 <Link
                                     href="/profile"
-                                    className="text-gray-300 hover:text-white transition-colors"
+                                    className="text-sm text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
                                 >
-                                    👤 {session.user.name}
+                                    <Icons.User className="w-4 h-4" />
+                                    {session.user.name}
                                 </Link>
-                                <button
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
                                     onClick={() => signOut({ callbackUrl: "/" })}
-                                    className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
+                                    className="text-zinc-400 hover:text-white"
                                 >
+                                    <Icons.Logout className="w-4 h-4 mr-2" />
                                     Sign Out
-                                </button>
+                                </Button>
                             </>
                         ) : (
                             <>
-                                <Link
-                                    href="/login"
-                                    className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
-                                >
-                                    Login
+                                <Link href="/login">
+                                    <Button variant="ghost" size="sm">Login</Button>
                                 </Link>
-                                <Link
-                                    href="/register"
-                                    className="px-4 py-2 text-sm bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all"
-                                >
-                                    Get Started
+                                <Link href="/register">
+                                    <Button variant="primary" size="sm">Get Started</Button>
                                 </Link>
                             </>
                         )}
@@ -90,20 +91,21 @@ export function Navbar() {
 
             {/* Mobile nav */}
             {session && (
-                <div className="md:hidden border-t border-white/10 px-4 py-2 overflow-x-auto">
+                <div className="md:hidden border-t border-white/[0.08] px-4 py-3 overflow-x-auto bg-black/90 backdrop-blur-xl">
                     <div className="flex gap-2">
                         {navItems.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
                                 className={cn(
-                                    "px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200",
+                                    "px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-all duration-200 flex items-center gap-2",
                                     pathname === item.href
-                                        ? "bg-white/10 text-white"
-                                        : "text-gray-400 hover:text-white"
+                                        ? "bg-white text-black"
+                                        : "text-zinc-400 hover:text-white"
                                 )}
                             >
-                                {item.icon}
+                                <item.Icon className="w-4 h-4" />
+                                {item.label}
                             </Link>
                         ))}
                     </div>

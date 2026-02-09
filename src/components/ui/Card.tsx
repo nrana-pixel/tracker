@@ -9,9 +9,9 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     ({ className, variant = "default", children, ...props }, ref) => {
         const variants = {
             default:
-                "bg-gray-900/50 border border-white/10 backdrop-blur-sm",
+                "bg-zinc-900/40 border border-white/[0.08] backdrop-blur-xl shadow-2xl shadow-black/50 text-white",
             glass:
-                "bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl",
+                "bg-white/[0.03] border border-white/[0.08] backdrop-blur-3xl text-white",
         };
 
         return (

@@ -22,16 +22,16 @@ export function Toggle({ checked, onChange, label, disabled }: ToggleProps) {
                 />
                 <div
                     className={cn(
-                        "w-11 h-6 rounded-full transition-all duration-300",
+                        "w-11 h-6 rounded-full transition-all duration-300 border border-white/10",
                         checked
-                            ? "bg-gradient-to-r from-indigo-600 to-purple-600"
-                            : "bg-white/10"
+                            ? "bg-white"
+                            : "bg-white/[0.05]"
                     )}
                 />
                 <div
                     className={cn(
                         "absolute top-0.5 left-0.5 w-5 h-5 rounded-full transition-all duration-300",
-                        "bg-white shadow-lg",
+                        checked ? "bg-black" : "bg-zinc-400",
                         checked && "translate-x-5"
                     )}
                 />

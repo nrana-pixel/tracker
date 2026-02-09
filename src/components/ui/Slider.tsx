@@ -21,30 +21,21 @@ export function Slider({
 }: SliderProps) {
     const percentage = ((value - min) / (max - min)) * 100;
 
-    const getColor = () => {
-        if (value <= 2) return "from-red-500 to-red-600";
-        if (value <= 3) return "from-yellow-500 to-yellow-600";
-        return "from-green-500 to-green-600";
-    };
-
     return (
         <div className="w-full">
             {(label || showValue) && (
                 <div className="flex justify-between items-center mb-2">
                     {label && (
-                        <span className="text-sm font-medium text-gray-300">{label}</span>
+                        <span className="text-sm font-medium text-zinc-400">{label}</span>
                     )}
                     {showValue && (
                         <span className="text-sm font-semibold text-white">{value}/{max}</span>
                     )}
                 </div>
             )}
-            <div className="relative h-3 bg-white/10 rounded-full overflow-hidden">
+            <div className="relative h-2 bg-zinc-800 rounded-full overflow-hidden">
                 <div
-                    className={cn(
-                        "absolute h-full rounded-full bg-gradient-to-r transition-all duration-300",
-                        getColor()
-                    )}
+                    className="absolute h-full rounded-full bg-white transition-all duration-300"
                     style={{ width: `${percentage}%` }}
                 />
             </div>
@@ -54,10 +45,9 @@ export function Slider({
                 max={max}
                 value={value}
                 onChange={(e) => onChange?.(Number(e.target.value))}
-                className="absolute w-full h-3 opacity-0 cursor-pointer"
-                style={{ marginTop: "-12px" }}
+                className="absolute w-full h-2 opacity-0 cursor-pointer -mt-2"
             />
-            <div className="flex justify-between mt-1">
+            <div className="flex justify-between mt-2">
                 {Array.from({ length: max - min + 1 }, (_, i) => i + min).map((n) => (
                     <button
                         key={n}
@@ -66,8 +56,8 @@ export function Slider({
                         className={cn(
                             "w-6 h-6 rounded-full text-xs font-medium transition-all duration-200",
                             value === n
-                                ? "bg-white/20 text-white"
-                                : "text-gray-500 hover:text-gray-300"
+                                ? "bg-white text-black"
+                                : "text-zinc-500 hover:text-zinc-300"
                         )}
                     >
                         {n}

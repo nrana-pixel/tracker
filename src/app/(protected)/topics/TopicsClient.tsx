@@ -8,6 +8,7 @@ import { Select } from "@/components/ui/Select";
 import { createTopic, deleteTopic } from "@/actions/topics";
 import { Topic, Category } from "@prisma/client";
 import Link from "next/link";
+import { Icons } from "@/components/ui/Icons";
 
 interface TopicsClientProps {
     initialTopics: (Topic & { _count: { dailyLogs: number } })[];
@@ -31,7 +32,6 @@ export function TopicsClient({ initialTopics }: TopicsClientProps) {
             setError(result.error);
         } else {
             setIsCreating(false);
-            // Refresh topics
             window.location.reload();
         }
         setIsLoading(false);
@@ -46,62 +46,65 @@ export function TopicsClient({ initialTopics }: TopicsClientProps) {
         }
     }
 
-    const getCategoryEmoji = (category: Category) => {
+    const getCategoryIcon = (category: Category) => {
         switch (category) {
             case "DSA":
-                return "🧮";
+                return <Icons.Trending className="w-3.5 h-3.5" />;
             case "Backend":
-                return "⚙️";
+                return <Icons.Database className="w-3.5 h-3.5" />;
             default:
-                return "📌";
-        }
-    };
-
-    const getCategoryColor = (category: Category) => {
-        switch (category) {
-            case "DSA":
-                return "bg-blue-500/20 text-blue-400";
-            case "Backend":
-                return "bg-green-500/20 text-green-400";
-            default:
-                return "bg-purple-500/20 text-purple-400";
+                return <Icons.Bookmark className="w-3.5 h-3.5" />;
         }
     };
 
     return (
-        <div>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold gradient-text">Topics</h1>
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Topics</h1>
+                    <p className="text-zinc-400">Manage your learning paths</p>
+                </div>
                 <Button onClick={() => setIsCreating(!isCreating)}>
-                    {isCreating ? "Cancel" : "+ New Topic"}
+                    {isCreating ? (
+                        <>
+                            <Icons.Close className="w-4 h-4 mr-2" />
+                            Cancel
+                        </>
+                    ) : (
+                        <>
+                            <Icons.Add className="w-4 h-4 mr-2" />
+                            New Topic
+                        </>
+                    )}
                 </Button>
             </div>
 
             {isCreating && (
-                <Card className="mb-6 animate-fade-in">
-                    <CardContent>
-                        <form onSubmit={handleCreate} className="flex gap-4 items-end">
-                            <div className="flex-1">
+                <Card className="animate-fade-in border-zinc-800 bg-zinc-900/50">
+                    <CardContent className="pt-6">
+                        <form onSubmit={handleCreate} className="flex flex-col md:flex-row gap-4 items-end">
+                            <div className="flex-1 w-full">
                                 <Input
                                     name="name"
                                     label="Topic Name"
                                     placeholder="e.g., Arrays, REST APIs"
                                     required
+                                    autoFocus
                                 />
                             </div>
-                            <div className="w-40">
+                            <div className="w-full md:w-48">
                                 <Select
                                     name="category"
                                     label="Category"
                                     options={[
-                                        { value: "DSA", label: "🧮 DSA" },
-                                        { value: "Backend", label: "⚙️ Backend" },
-                                        { value: "Custom", label: "📌 Custom" },
+                                        { value: "DSA", label: "DSA" },
+                                        { value: "Backend", label: "Backend" },
+                                        { value: "Custom", label: "Custom" },
                                     ]}
                                 />
                             </div>
-                            <Button type="submit" isLoading={isLoading}>
-                                Create
+                            <Button type="submit" isLoading={isLoading} className="w-full md:w-auto">
+                                Create Topic
                             </Button>
                         </form>
                         {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
@@ -110,39 +113,44 @@ export function TopicsClient({ initialTopics }: TopicsClientProps) {
             )}
 
             {topics.length === 0 ? (
-                <Card className="text-center py-12">
-                    <div className="text-5xl mb-4">📚</div>
+                <Card className="text-center py-16 border-dashed border-zinc-800 bg-transparent">
+                    <div className="flex justify-center mb-4">
+                        <div className="p-4 rounded-full bg-zinc-900">
+                            <Icons.Topics className="w-8 h-8 text-zinc-500" />
+                        </div>
+                    </div>
                     <h3 className="text-xl font-medium text-white mb-2">No topics yet</h3>
-                    <p className="text-gray-400">
-                        Create your first topic to start tracking progress
+                    <p className="text-zinc-500 max-w-sm mx-auto mb-6">
+                        Create your first topic to start tracking your learning progress.
                     </p>
+                    <Button onClick={() => setIsCreating(true)} variant="secondary">
+                        Create Topic
+                    </Button>
                 </Card>
             ) : (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {topics.map((topic) => (
-                        <Card key={topic.id} className="group">
-                            <CardHeader className="flex flex-row justify-between items-start">
-                                <div>
-                                    <span
-                                        className={`inline-block px-2 py-1 rounded text-xs font-medium mb-2 ${getCategoryColor(
-                                            topic.category
-                                        )}`}
-                                    >
-                                        {getCategoryEmoji(topic.category)} {topic.category}
+                        <Card key={topic.id} variant="glass" className="group hover:border-zinc-700 transition-colors">
+                            <CardHeader className="flex flex-row justify-between items-start space-y-0 pb-2">
+                                <div className="space-y-1">
+                                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-white/[0.05] text-zinc-300 border border-white/[0.05]">
+                                        {getCategoryIcon(topic.category)}
+                                        {topic.category}
                                     </span>
-                                    <Link href={`/topics/${topic.id}`} className="hover:text-indigo-400 transition-colors">
-                                        <CardTitle>{topic.name}</CardTitle>
+                                    <Link href={`/topics/${topic.id}`} className="block group-hover:text-white transition-colors">
+                                        <CardTitle className="text-xl mt-2">{topic.name}</CardTitle>
                                     </Link>
                                 </div>
                                 <button
                                     onClick={() => handleDelete(topic.id)}
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-red-500"
+                                    className="opacity-0 group-hover:opacity-100 transition-all p-2 hover:bg-red-500/10 rounded-md text-zinc-500 hover:text-red-500"
                                 >
-                                    🗑️
+                                    <Icons.Delete className="w-4 h-4" />
                                 </button>
                             </CardHeader>
                             <CardContent>
-                                <div className="text-sm text-gray-400">
+                                <div className="flex items-center text-sm text-zinc-500">
+                                    <Icons.Logs className="w-4 h-4 mr-2" />
                                     {topic._count.dailyLogs} logs recorded
                                 </div>
                             </CardContent>

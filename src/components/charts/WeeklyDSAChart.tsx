@@ -1,13 +1,14 @@
 "use client";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Icons } from "@/components/ui/Icons";
 import {
-    LineChart,
-    Line,
+    Bar,
+    BarChart,
+    ResponsiveContainer,
     XAxis,
     YAxis,
-    CartesianGrid,
     Tooltip,
-    ResponsiveContainer,
 } from "recharts";
 
 interface WeeklyDSAChartProps {
@@ -16,51 +17,55 @@ interface WeeklyDSAChartProps {
 
 export function WeeklyDSAChart({ data }: WeeklyDSAChartProps) {
     const formattedData = data.map((item) => ({
-        ...item,
-        date: new Date(item.date).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-        }),
+        name: new Date(item.date).toLocaleDateString("en-US", { weekday: 'short' }),
+        problems: item.problems,
     }));
 
     return (
-        <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={formattedData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                    <XAxis
-                        dataKey="date"
-                        stroke="rgba(255,255,255,0.5)"
-                        tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 12 }}
-                    />
-                    <YAxis
-                        stroke="rgba(255,255,255,0.5)"
-                        tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 12 }}
-                    />
-                    <Tooltip
-                        contentStyle={{
-                            backgroundColor: "rgba(17, 24, 39, 0.9)",
-                            border: "1px solid rgba(255,255,255,0.1)",
-                            borderRadius: "8px",
-                            color: "#fff",
-                        }}
-                    />
-                    <Line
-                        type="monotone"
-                        dataKey="problems"
-                        stroke="url(#lineGradient)"
-                        strokeWidth={3}
-                        dot={{ fill: "#818cf8", strokeWidth: 2, r: 4 }}
-                        activeDot={{ r: 6, fill: "#a78bfa" }}
-                    />
-                    <defs>
-                        <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
-                            <stop offset="0%" stopColor="#818cf8" />
-                            <stop offset="100%" stopColor="#a78bfa" />
-                        </linearGradient>
-                    </defs>
-                </LineChart>
-            </ResponsiveContainer>
-        </div>
+        <Card variant="glass" className="h-full">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                    <Icons.Analytics className="h-4 w-4" />
+                    Weekly Progress
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="h-[200px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={formattedData}>
+                            <XAxis
+                                dataKey="name"
+                                stroke="#52525b"
+                                fontSize={12}
+                                tickLine={false}
+                                axisLine={false}
+                            />
+                            <YAxis
+                                stroke="#52525b"
+                                fontSize={12}
+                                tickLine={false}
+                                axisLine={false}
+                                tickFormatter={(value) => `${value}`}
+                            />
+                            <Tooltip
+                                contentStyle={{
+                                    backgroundColor: "rgba(9, 9, 11, 0.9)",
+                                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                                    borderRadius: "8px",
+                                    color: "#fff",
+                                }}
+                                cursor={{ fill: "rgba(255, 255, 255, 0.05)" }}
+                            />
+                            <Bar
+                                dataKey="problems"
+                                fill="#ffffff"
+                                radius={[4, 4, 0, 0]}
+                                className="fill-white"
+                            />
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            </CardContent>
+        </Card>
     );
 }
