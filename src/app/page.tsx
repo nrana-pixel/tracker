@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { Button } from "@/components/ui/Button";
 import { Icons } from "@/components/ui/Icons";
-import { Card, CardContent } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);

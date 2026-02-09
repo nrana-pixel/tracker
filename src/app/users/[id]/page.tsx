@@ -5,6 +5,15 @@ import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { Icons } from "@/components/ui/Icons";
 
+interface RecentLog {
+    id: string;
+    topic: { name: string };
+    problemsSolved: number;
+    revisionVolume: number;
+    stars: number;
+    date: Date;
+}
+
 interface Props {
     params: { id: string };
 }
@@ -100,7 +109,7 @@ export default async function UserProfilePage({ params }: Props) {
                     </Card>
                 ) : (
                     <div className="space-y-3">
-                        {recentLogs.map((log: any) => (
+                        {recentLogs.map((log: RecentLog) => (
                             <Card key={log.id} variant="glass" className="hover:border-zinc-700 transition-colors group">
                                 <CardContent className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 gap-3">
                                     <div className="flex items-center gap-3">

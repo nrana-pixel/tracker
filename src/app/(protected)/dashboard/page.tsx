@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getDashboardStats, getChartData } from "@/actions/dashboard";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { Card, CardContent } from "@/components/ui/Card";
 import { WeeklyDSAChart } from "@/components/charts/WeeklyDSAChart";
 import { RevisionVolumeChart } from "@/components/charts/RevisionVolumeChart";
 import { SkillConfidenceChart } from "@/components/charts/SkillConfidenceChart";
@@ -134,7 +134,7 @@ export default async function DashboardPage() {
                     <CardContent className="p-0">
                         {stats.weakTopics.length > 0 ? (
                             <ul className="space-y-3">
-                                {stats.weakTopics.map((topic: any) => (
+                                {stats.weakTopics.map((topic: { id: string; name: string; totalProblems: number }) => (
                                     <li
                                         key={topic.id}
                                         className="flex justify-between items-center p-3 rounded-md bg-white/[0.03] border border-white/[0.05]"
@@ -166,7 +166,7 @@ export default async function DashboardPage() {
                     <CardContent className="p-0">
                         {stats.lowConfidenceSkills.length > 0 ? (
                             <ul className="space-y-3">
-                                {stats.lowConfidenceSkills.map((skill: any) => (
+                                {stats.lowConfidenceSkills.map((skill: { id: string; skill: string; confidence: number }) => (
                                     <li
                                         key={skill.id}
                                         className="flex justify-between items-center p-3 rounded-md bg-white/[0.03] border border-white/[0.05]"

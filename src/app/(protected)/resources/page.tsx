@@ -3,7 +3,19 @@ import { Card, CardContent } from "@/components/ui/Card";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Icons } from "@/components/ui/Icons";
-import { formatDate } from "@/lib/utils";
+
+
+interface Resource {
+    id: string;
+    title: string;
+    description: string | null;
+    type: string;
+    url: string;
+    upvotes: number;
+    user: { name: string };
+    createdAt: Date;
+    topic: { name: string } | null;
+}
 
 export default async function ResourcesPage() {
     const resources = await getResources();
@@ -35,7 +47,7 @@ export default async function ResourcesPage() {
                         <p className="text-zinc-500">Be the first to share a helpful resource!</p>
                     </Card>
                 ) : (
-                    resources.map((resource) => (
+                    resources.map((resource: Resource) => (
                         <Card key={resource.id} variant="glass" className="group hover:border-zinc-700 transition-colors">
                             <CardContent className="p-6">
                                 <div className="flex gap-4">

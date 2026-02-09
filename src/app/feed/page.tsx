@@ -4,6 +4,23 @@ import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import { Icons } from "@/components/ui/Icons";
 
+interface FeedLog {
+    id: string;
+    user: {
+        id: string;
+        name: string;
+        avatarUrl: string | null;
+    };
+    date: Date;
+    problemsSolved: number;
+    revisionVolume: number;
+    topic: {
+        name: string;
+    };
+    stars: number;
+    notes: string | null;
+}
+
 export default async function FeedPage() {
     const { logs, total } = await getPublicFeed(1, 50);
 
@@ -35,7 +52,7 @@ export default async function FeedPage() {
             ) : (
                 <div className="space-y-4">
                     <p className="text-sm text-zinc-500">{total} public logs</p>
-                    {logs.map((log: any) => (
+                    {logs.map((log: FeedLog) => (
                         <Card key={log.id} variant="glass" className="hover:border-zinc-700 transition-colors group">
                             <CardContent className="p-5">
                                 <div className="flex items-start gap-4">

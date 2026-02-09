@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
@@ -8,13 +10,32 @@ import { StarRating } from "@/components/ui/StarRating";
 import { Slider } from "@/components/ui/Slider";
 import { Toggle } from "@/components/ui/Toggle";
 import { createDailyLog, deleteDailyLog } from "@/actions/logs";
-import { Topic, DailyLog } from "@prisma/client";
-import { formatDate, getStarString } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { Icons } from "@/components/ui/Icons";
+
+interface Topic {
+    id: string;
+    name: string;
+}
+
+interface DailyLog {
+    id: string;
+    date: Date;
+    isPublic: boolean;
+    problemsSolved: number;
+    revisionVolume: number;
+    energy: number;
+    techUsed?: string | null;
+    problemUrls?: string[] | null;
+    notes?: string | null;
+    stars: number;
+    topic: Topic;
+    topicId: string;
+}
 
 interface LogsClientProps {
     topics: Topic[];
-    initialLogs: (DailyLog & { topic: Topic })[];
+    initialLogs: DailyLog[];
 }
 
 export function LogsClient({ topics, initialLogs }: LogsClientProps) {

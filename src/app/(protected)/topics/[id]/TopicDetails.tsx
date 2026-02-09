@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { formatDate, getStarString } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { deleteDailyLog } from "@/actions/logs";
 import { Icons } from "@/components/ui/Icons";
 import Link from "next/link";

@@ -14,7 +14,6 @@ import {
     Star,
     Zap,
     CheckCircle,
-    XCircle,
     AlertCircle,
     Menu,
     X,
