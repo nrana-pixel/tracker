@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  password      String
+  bio           String?
+  avatarUrl     String?
+  isPublic      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  
+  topics        Topic[]
+  dailyLogs     DailyLog[]
+  backendSkills BackendSkill[]
+  resources     Resource[]
+}
+
+enum Category {
+  DSA
+  Backend
+  Custom
+}
+
+model Topic {
+  id        String    @id @default(cuid())
+  userId    String
+  name      String
+  category  Category  @default(Custom)
+  createdAt DateTime  @default(now())
+  
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyLogs DailyLog[]
+  resources Resource[]
+
+  @@unique([userId, name])
+}
+
+model DailyLog {
+  id             String   @id @default(cuid())
+  userId         String
+  topicId        String
+  date           DateTime @default(now())
+  energy         Int      @default(3)
+  problemsSolved Int      @default(0)
+  revisionVolume Int      @default(0)
+  backendWork    String?
+  techUsed       String?
+  notes          String?
+  problemUrls    String[] @default([])
+  stars          Int      @default(3)
+  isPublic       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([isPublic])
+}
+
+model BackendSkill {
+  id            String   @id @default(cuid())
+  userId        String
+  skill         String
+  practiced     Boolean  @default(false)
+  usedInProject Boolean  @default(false)
+  confidence    Int      @default(1)
+  createdAt     DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, skill])
+}
+
+enum ResourceType {
+  Documentation
+  Video
+  Article
+  Course
+  GitHub
+  Other
+}
+
+model Resource {
+  id          String       @id @default(cuid())
+  userId      String
+  topicId     String?
+  title       String
+  url         String
+  description String?
+  type        ResourceType @default(Other)
+  isPublic    Boolean      @default(true)
+  upvotes     Int          @default(0)
+  createdAt   DateTime     @default(now())
+  
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic Topic? @relation(fields: [topicId], references: [id], onDelete: SetNull)
+
+  @@index([topicId])
+  @@index([isPublic])
+  @@index([upvotes])
+}
