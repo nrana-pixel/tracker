@@ -133,6 +133,17 @@ export function LogsClient({ topics, initialLogs }: LogsClientProps) {
                                     placeholder="Any additional notes..."
                                 />
 
+                                <div className="space-y-1">
+                                    <label className="text-sm font-medium text-gray-300">
+                                        Problem URLs (one per line)
+                                    </label>
+                                    <textarea
+                                        name="problemUrls"
+                                        className="w-full bg-black/20 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[80px]"
+                                        placeholder="https://leetcode.com/ problems/two-sum..."
+                                    />
+                                </div>
+
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -204,6 +215,21 @@ export function LogsClient({ topics, initialLogs }: LogsClientProps) {
                                         <span>⚡ Energy: {log.energy}/5</span>
                                         {log.techUsed && <span>🔧 {log.techUsed}</span>}
                                     </div>
+                                    {log.problemUrls && log.problemUrls.length > 0 && (
+                                        <div className="mt-2 space-y-1">
+                                            {log.problemUrls.map((url: string, i: number) => (
+                                                <a
+                                                    key={i}
+                                                    href={url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="block text-xs text-indigo-400 hover:underline truncate"
+                                                >
+                                                    🔗 {url}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    )}
                                     {log.notes && (
                                         <p className="mt-2 text-sm text-gray-500">{log.notes}</p>
                                     )}

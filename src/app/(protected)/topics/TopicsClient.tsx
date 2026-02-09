@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { createTopic, deleteTopic } from "@/actions/topics";
 import { Topic, Category } from "@prisma/client";
+import Link from "next/link";
 
 interface TopicsClientProps {
     initialTopics: (Topic & { _count: { dailyLogs: number } })[];
@@ -129,7 +130,9 @@ export function TopicsClient({ initialTopics }: TopicsClientProps) {
                                     >
                                         {getCategoryEmoji(topic.category)} {topic.category}
                                     </span>
-                                    <CardTitle>{topic.name}</CardTitle>
+                                    <Link href={`/topics/${topic.id}`} className="hover:text-indigo-400 transition-colors">
+                                        <CardTitle>{topic.name}</CardTitle>
+                                    </Link>
                                 </div>
                                 <button
                                     onClick={() => handleDelete(topic.id)}
